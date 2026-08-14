@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌿 莫兰迪配色 · 方案管理</title>
+
+  <style>
+    /* ============================================================
+       全局样式
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: #f5f0eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px 28px 20px;
+      max-width: 880px;
+      width: 100%;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ===== 标题栏 ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      font-size: 1.3rem;
+      color: #b0b0b0;
+      transition: color 0.2s;
+      line-height: 1;
+      padding: 4px 4px 4px 0;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      color: #2c2c2c;
+    }
+
+    .header-left h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2c2c2c;
+    }
+
+    .header-left .scheme-name {
+      font-size: 0.85rem;
+      color: #8a8a8a;
+      background: #f0ece6;
+      padding: 2px 14px;
+      border-radius: 40px;
+    }
+
+    .family-tags {
+      display: inline-flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .family-tag {
+      font-size: 0.6rem;
+      padding: 2px 10px;
+      border-radius: 40px;
+      background: #f0ece6;
+      color: #6a6a6a;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 7px 16px;
+      border: none;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #2c2c2c;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #1a1a1a;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #6a6a6a;
+      border: 1px solid #d0d0d0;
+    }
+    .btn-outline:hover {
+      border-color: #2c2c2c;
+      color: #2c2c2c;
+    }
+
+    .btn-save {
+      background: #2c7a4a;
+      color: #fff;
+    }
+    .btn-save:hover {
+      background: #1e5f38;
+    }
+
+    .btn-export {
+      background: #6c5b7b;
+      color: #fff;
+    }
+    .btn-export:hover {
+      background: #5a4a6a;
+    }
+
+    .btn-manage {
+      background: #4a6a7a;
+      color: #fff;
+    }
+    .btn-manage:hover {
+      background: #3a5a6a;
+    }
+
+    .btn-danger-sm {
+      background: transparent;
+      color: #c0392b;
+      border: 1px solid #f0e0dd;
+      font-size: 0.7rem;
+      padding: 3px 12px;
+    }
+    .btn-danger-sm:hover {
+      background: #fde8e5;
+    }
+
+    .btn-close-panel {
+      background: transparent;
+      color: #b0b0b0;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+    .btn-close-panel:hover {
+      color: #2c2c2c;
+    }
+
+    /* ===== 配色展示 ===== */
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .color-card {
+      position: relative;
+      border-radius: 14px;
+      aspect-ratio: 4 / 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px 10px 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      background: #e8e0d8;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .color-card:hover {
+      transform: translateY(-4px);
+      border-color: #2c2c2c;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .color-card .color-value {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 0.3px;
+      pointer-events: none;
+    }
+
+    .color-card .color-label {
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      margin-top: 2px;
+      pointer-events: none;
+    }
+
+    .color-card.light-text .color-value,
+    .color-card.light-text .color-label {
+      color: rgba(0, 0, 0, 0.75);
+      text-shadow: none;
+    }
+    .color-card.light-text .color-label {
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    /* ===== Toast ===== */
+    .toast {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #6a6a6a;
+      padding: 4px 0;
+      transition: opacity 0.3s;
+      min-height: 28px;
+    }
+    .toast.active {
+      color: #2c7a4a;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       方案管理面板 (Modal)
+       ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #ffffff;
+      border-radius: 24px;
+      max-width: 740px;
+      width: 100%;
+      max-height: 85vh;
+      padding: 24px 28px 20px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .modal-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c2c2c;
+    }
+
+    .modal-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .modal-tabs .tab-btn {
+      padding: 5px 16px;
+      border: 1px solid #e0dcd6;
+      border-radius: 40px;
+      background: transparent;
+      font-size: 0.8rem;
+      color: #8a8a8a;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .modal-tabs .tab-btn:hover {
+      border-color: #2c2c2c;
+      color: #2c2c2c;
+    }
+
+    .modal-tabs .tab-btn.active {
+      background: #2c2c2c;
+      color: #fff;
+      border-color: #2c2c2c;
+    }
+
+    /* ===== 搜索框 ===== */
+    .search-box {
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid #e0dcd6;
+      font-size: 0.85rem;
+      background: #faf8f5;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      color: #2c2c2c;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #2c2c2c;
+    }
+
+    .search-box input::placeholder {
+      color: #b0b0b0;
+    }
+
+    /* ===== 色系筛选栏 ===== */
+    .family-filter-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0ece6;
+      flex-shrink: 0;
+    }
+
+    .family-filter-btn {
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid #e0dcd6;
+      background: transparent;
+      font-size: 0.7rem;
+      color: #8a8a8a;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .family-filter-btn:hover {
+      border-color: #b0b0b0;
+      color: #2c2c2c;
+    }
+
+    .family-filter-btn.active {
+      background: #2c2c2c;
+      color: #ffffff;
+      border-color: #2c2c2c;
+    }
+
+    /* ===== 方案列表 ===== */
+    .modal-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .modal-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .modal-list::-webkit-scrollbar-thumb {
+      background: #d0ccc6;
+      border-radius: 4px;
+    }
+
+    .scheme-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #f0ece6;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      cursor: default;
+      flex-wrap: wrap;
+    }
+
+    .scheme-item:hover {
+      border-color: #d0ccc6;
+      background: #faf8f5;
+    }
+
+    .scheme-item .item-swatches {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .scheme-item .item-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      flex-shrink: 0;
+    }
+
+    .scheme-item .item-info {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .scheme-item .item-info .item-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #2c2c2c;
+    }
+
+    .scheme-item .item-info .item-meta {
+      font-size: 0.65rem;
+      color: #b0b0b0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .scheme-item .item-info .item-meta .badge-fav {
+      color: #2c7a4a;
+    }
+
+    .scheme-item .item-info .item-families {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .scheme-item .item-info .item-families .mini-tag {
+      font-size: 0.55rem;
+      padding: 1px 8px;
+      border-radius: 40px;
+      background: #f0ece6;
+      color: #6a6a6a;
+    }
+
+    .scheme-item .item-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .scheme-item .item-actions .btn-sm {
+      padding: 4px 12px;
+      border: none;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .scheme-item .item-actions .btn-load {
+      background: #2c2c2c;
+      color: #fff;
+    }
+    .scheme-item .item-actions .btn-load:hover {
+      background: #1a1a1a;
+    }
+
+    .scheme-item .item-actions .btn-export-sm {
+      background: #6c5b7b;
+      color: #fff;
+    }
+    .scheme-item .item-actions .btn-export-sm:hover {
+      background: #5a4a6a;
+    }
+
+    .scheme-item .item-actions .btn-del {
+      background: transparent;
+      color: #c0392b;
+    }
+    .scheme-item .item-actions .btn-del:hover {
+      background: #fde8e5;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px 0;
+      color: #b0b0b0;
+      font-size: 0.85rem;
+    }
+
+    .modal-footer {
+      flex-shrink: 0;
+      padding-top: 12px;
+      border-top: 1px solid #f0ece6;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.7rem;
+      color: #b0b0b0;
+    }
+
+    /* ===== 底部 ===== */
+    .footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f0ece6;
+      font-size: 0.7rem;
+      color: #c0c0c0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-info kbd {
+      background: #f5f0eb;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.6rem;
+      color: #8a8a8a;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 640px) {
+      .container {
+        padding: 16px 12px 12px;
+      }
+      .palette {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .color-card {
+        aspect-ratio: 3 / 4;
+        padding: 8px 6px 6px;
+      }
+      .color-card .color-value {
+        font-size: 0.55rem;
+      }
+      .header-left h1 {
+        font-size: 1rem;
+      }
+      .header-left .scheme-name {
+        font-size: 0.7rem;
+      }
+      .btn {
+        font-size: 0.7rem;
+        padding: 5px 12px;
+      }
+      .modal {
+        padding: 16px 14px 14px;
+        max-height: 90vh;
+      }
+      .scheme-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .scheme-item .item-actions {
+        justify-content: flex-end;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .palette {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ===== 标题栏 ===== -->
+    <div class="header">
+      <div class="header-left">
+        <a href="index.html" class="back-btn" title="返回">←</a>
+        <h1>🌿 莫兰迪配色</h1>
+        <span class="scheme-name" id="schemeName">日系 · 柔和</span>
+        <span class="family-tags" id="familyTags"></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" id="lockBtn">🔓 解锁</button>
+        <button class="btn btn-save" id="saveBtn">💾 收藏</button>
+        <button class="btn btn-export" id="exportBtn">📷 导出</button>
+        <button class="btn btn-manage" id="manageBtn">📁 方案</button>
+        <button class="btn btn-primary" id="generateBtn">✨ 生成</button>
+      </div>
+    </div>
+
+    <!-- ===== 配色展示 ===== -->
+    <div class="palette" id="palette"></div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast">💡 点击色块复制色值</div>
+
+    <!-- ===== 底部 ===== -->
+    <div class="footer-info">
+      <span>按 <kbd>空格</kbd> 生成 · 点击色块复制</span>
+      <span id="statsText">⭐ 0 收藏 · 📋 0 历史</span>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+  方案管理面板 (Modal)
+  ============================================================ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>📁 方案管理</h2>
+        <button class="btn-close-panel" id="closeModalBtn">✕</button>
+      </div>
+
+      <div class="modal-tabs" id="modalTabs">
+        <button class="tab-btn active" data-tab="all">全部</button>
+        <button class="tab-btn" data-tab="fav">⭐ 收藏</button>
+        <button class="tab-btn" data-tab="history">📋 历史</button>
+      </div>
+
+      <!-- ===== 搜索框 ===== -->
+      <div class="search-box">
+        <input type="text" id="familySearch" placeholder="🔍 搜索色系（如：粉色、蓝色）" />
+      </div>
+
+      <!-- ===== 色系筛选按钮 ===== -->
+      <div class="family-filter-bar" id="familyFilterBar">
+        <button class="family-filter-btn active" data-family="">全部</button>
+        <!-- 由 JS 动态生成 -->
+      </div>
+
+      <div class="modal-list" id="modalList">
+        <div class="empty-state">加载中...</div>
+      </div>
+
+      <div class="modal-footer">
+        <span id="modalStats">共 0 个方案</span>
+        <button class="btn btn-danger-sm" id="clearAllBtn">清空全部</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================================================================
+       🎨 莫兰迪配色 · 完整版（含搜索与分类）
+       ================================================================ */
+
+    // ---- DOM 引用 ----
+    const paletteEl = document.getElementById('palette')
+    const generateBtn = document.getElementById('generateBtn')
+    const lockBtn = document.getElementById('lockBtn')
+    const saveBtn = document.getElementById('saveBtn')
+    const exportBtn = document.getElementById('exportBtn')
+    const manageBtn = document.getElementById('manageBtn')
+    const toast = document.getElementById('toast')
+    const schemeNameEl = document.getElementById('schemeName')
+    const familyTagsEl = document.getElementById('familyTags')
+    const statsText = document.getElementById('statsText')
+
+    const modalOverlay = document.getElementById('modalOverlay')
+    const closeModalBtn = document.getElementById('closeModalBtn')
+    const modalList = document.getElementById('modalList')
+    const modalStats = document.getElementById('modalStats')
+    const modalTabs = document.getElementById('modalTabs')
+    const clearAllBtn = document.getElementById('clearAllBtn')
+    const familySearch = document.getElementById('familySearch')
+    const familyFilterBar = document.getElementById('familyFilterBar')
+
+    // ---- 状态 ----
+    let isLocked = false
+    let currentColors = []
+    let currentName = ''
+    let currentTab = 'all'
+    let currentSearch = ''
+    let currentFamilyFilter = ''
+
+    // ================================================================
+    // 色系定义
+    // ================================================================
+
+    const ALL_FAMILIES = ['红色系', '橙色系', '黄色系', '绿色系', '蓝色系', '紫色系', '粉色系', '棕色系', '灰色系', '黑色系', '白色系']
+
+    function getFamilyEmoji(family) {
+      const map = {
+        '红色系': '🔴',
+        '橙色系': '🟠',
+        '黄色系': '🟡',
+        '绿色系': '🟢',
+        '蓝色系': '🔵',
+        '紫色系': '🟣',
+        '粉色系': '🌸',
+        '棕色系': '🟤',
+        '灰色系': '⚪',
+        '黑色系': '⬛',
+        '白色系': '⬜'
+      }
+      return map[family] || '📦'
+    }
+
+    function getColorFamilies(colors) {
+      const families = new Set()
+      colors.forEach(hex => {
+        const { r, g, b } = hexToRgb(hex)
+        const hsl = rgbToHsl(r, g, b)
+        const h = hsl.h,
+          s = hsl.s,
+          l = hsl.l
+        let family = ''
+        if (l < 20) {
+          family = '黑色系'
+        } else if (l > 85 && s < 20) {
+          family = '白色系'
+        } else if (s < 20 && l >= 20 && l <= 80) {
+          family = '灰色系'
+        } else if (h >= 20 && h < 50 && l < 40) {
+          family = '棕色系'
+        } else if (h >= 300 && h < 350 && s > 30) {
+          family = '粉色系'
+        } else if ((h >= 0 && h < 20) || (h >= 340 && h <= 360)) {
+          family = '红色系'
+        } else if (h >= 20 && h < 50) {
+          family = '橙色系'
+        } else if (h >= 50 && h < 75) {
+          family = '黄色系'
+        } else if (h >= 75 && h < 165) {
+          family = '绿色系'
+        } else if (h >= 165 && h < 250) {
+          family = '蓝色系'
+        } else if (h >= 250 && h < 300) {
+          family = '紫色系'
+        } else if (h >= 300 && h < 340) {
+          family = '粉色系'
+        } else {
+          family = '其他'
+        }
+        families.add(family)
+      })
+      return Array.from(families)
+    }
+
+    // ================================================================
+    // 颜色工具函数
+    // ================================================================
+
+    function hslToHex(h, s, l) {
+      const s1 = s / 100,
+        l1 = l / 100
+      const c = (1 - Math.abs(2 * l1 - 1)) * s1
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+      const m = l1 - c / 2
+      let r, g, b
+      if (h >= 0 && h < 60) { r = c;
+        g = x;
+        b = 0 } else if (h >= 60 && h < 120) { r = x;
+        g = c;
+        b = 0 } else if (h >= 120 && h < 180) { r = 0;
+        g = c;
+        b = x } else if (h >= 180 && h < 240) { r = 0;
+        g = x;
+        b = c } else if (h >= 240 && h < 300) { r = x;
+        g = 0;
+        b = c } else { r = c;
+        g = 0;
+        b = x }
+      const r255 = Math.round((r + m) * 255)
+      const g255 = Math.round((g + m) * 255)
+      const b255 = Math.round((b + m) * 255)
+      return '#' + [r255, g255, b255].map(c => c.toString(16).padStart(2, '0')).join('')
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      if (!result) return { r: 0, g: 0, b: 0 }
+      return { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
+    }
+
+    function rgbToHsl(r, g, b) {
+      const r1 = r / 255,
+        g1 = g / 255,
+        b1 = b / 255
+      const max = Math.max(r1, g1, b1),
+        min = Math.min(r1, g1, b1)
+      let h, s, l = (max + min) / 2
+      if (max === min) { h = 0;
+        s = 0 } else {
+        const d = max - min
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+        switch (max) {
+          case r1:
+            h = ((g1 - b1) / d + (g1 < b1 ? 6 : 0)) / 6;
+            break
+          case g1:
+            h = ((b1 - r1) / d + 2) / 6;
+            break
+          case b1:
+            h = ((r1 - g1) / d + 4) / 6;
+            break
+        }
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
+    }
+
+    function isLightColor(hex) {
+      const { r, g, b } = hexToRgb(hex)
+      return (r * 299 + g * 587 + b * 114) / 1000 > 180
+    }
+
+    // ================================================================
+    // 自动命名
+    // ================================================================
+
+    function generateSchemeName(colors) {
+      const first = colors[0]
+      const h = first.h,
+        s = first.s,
+        l = first.l
+      let hueName = ''
+      if (h >= 0 && h < 30) hueName = '暖红'
+      else if (h >= 30 && h < 60) hueName = '橙黄'
+      else if (h >= 60 && h < 90) hueName = '黄绿'
+      else if (h >= 90 && h < 150) hueName = '青绿'
+      else if (h >= 150 && h < 210) hueName = '青蓝'
+      else if (h >= 210 && h < 270) hueName = '蓝紫'
+      else if (h >= 270 && h < 330) hueName = '粉紫'
+      else hueName = '粉红'
+      let satWord = ''
+      if (s < 20) satWord = '灰调'
+      else if (s < 35) satWord = '柔和'
+      else if (s < 50) satWord = '雅致'
+      else satWord = '鲜明'
+      let lightWord = ''
+      if (l < 40) lightWord = '沉稳'
+      else if (l < 60) lightWord = '温润'
+      else if (l < 75) lightWord = '清新'
+      else lightWord = '明亮'
+      const names = [
+        `${hueName} · ${satWord}`,
+        `${hueName} · ${lightWord}`,
+        `${satWord} · ${lightWord}`,
+        `${hueName} ${satWord}`,
+        `${lightWord} · ${hueName}`
+      ]
+      const seed = Math.floor(h / 10) % names.length
+      return names[seed % names.length]
+    }
+
+    // ================================================================
+    // 生成配色
+    // ================================================================
+
+    function generateMorandiColor() {
+      const hue = Math.floor(Math.random() * 360)
+      const saturation = 20 + Math.floor(Math.random() * 20)
+      const lightness = 45 + Math.floor(Math.random() * 35)
+      return { h: hue, s: saturation, l: lightness }
+    }
+
+    function generatePalette() {
+      if (isLocked) {
+        isLocked = false
+        lockBtn.textContent = '🔓 解锁'
+      }
+      const colors = []
+      for (let i = 0; i < 5; i++) {
+        const c = generateMorandiColor()
+        const hex = hslToHex(c.h, c.s, c.l)
+        colors.push({ hex, h: c.h, s: c.s, l: c.l })
+      }
+      currentColors = colors
+      currentName = generateSchemeName(colors)
+      schemeNameEl.textContent = currentName
+      renderColors(colors)
+      updateFamilyTags(colors)
+      addHistory(colors, currentName)
+      updateStats()
+      showToast('🎨 新配色已生成 · ' + currentName)
+    }
+
+    // ================================================================
+    // 渲染配色
+    // ================================================================
+
+    function renderColors(colors) {
+      paletteEl.innerHTML = ''
+      colors.forEach(color => {
+        const card = document.createElement('div')
+        card.className = 'color-card'
+        card.style.backgroundColor = color.hex
+        if (isLightColor(color.hex)) card.classList.add('light-text')
+        const valueSpan = document.createElement('span')
+        valueSpan.className = 'color-value'
+        valueSpan.textContent = color.hex.toUpperCase()
+        card.appendChild(valueSpan)
+        const labelSpan = document.createElement('span')
+        labelSpan.className = 'color-label'
+        labelSpan.textContent = `H${color.h}° S${color.s}% L${color.l}%`
+        card.appendChild(labelSpan)
+        card.addEventListener('click', function(e) {
+          e.stopPropagation()
+          copyToClipboard(color.hex.toUpperCase())
+        })
+        paletteEl.appendChild(card)
+      })
+    }
+
+    // ================================================================
+    // 色系标签更新
+    // ================================================================
+
+    function updateFamilyTags(colors) {
+      if (!familyTagsEl) return
+      const hexes = colors.map(c => c.hex)
+      const families = getColorFamilies(hexes)
+      if (families.length === 0 || (families.length === 1 && families[0] === '其他')) {
+        familyTagsEl.innerHTML = ''
+        return
+      }
+      familyTagsEl.innerHTML = families
+        .filter(f => f !== '其他')
+        .map(f => `<span class="family-tag">${getFamilyEmoji(f)} ${f}</span>`)
+        .join('')
+    }
+
+    // ================================================================
+    // 复制
+    // ================================================================
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`✅ 已复制 ${text}`)
+        }).catch(() => fallbackCopy(text))
+      } else {
+        fallbackCopy(text)
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      try {
+        document.execCommand('copy')
+        showToast(`✅ 已复制 ${text}`)
+      } catch (err) {
+        showToast('⚠️ 复制失败，请手动复制')
+      }
+      document.body.removeChild(textarea)
+    }
+
+    // ================================================================
+    // Toast
+    // ================================================================
+
+    let toastTimer = null
+
+    function showToast(msg) {
+      toast.textContent = msg
+      toast.classList.add('active')
+      clearTimeout(toastTimer)
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('active')
+        toast.textContent = '💡 点击色块复制色值'
+      }, 2000)
+    }
+
+    // ================================================================
+    // localStorage 操作
+    // ================================================================
+
+    function getFavorites() {
+      try { return JSON.parse(localStorage.getItem('morandi_favorites')) || [] } catch { return [] }
+    }
+
+    function saveFavorites(data) {
+      localStorage.setItem('morandi_favorites', JSON.stringify(data))
+    }
+
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem('morandi_history')) || [] } catch { return [] }
+    }
+
+    function saveHistory(data) {
+      localStorage.setItem('morandi_history', JSON.stringify(data))
+    }
+
+    function addHistory(colors, name) {
+      let history = getHistory()
+      const colorsHex = colors.map(c => c.hex)
+      const newItem = {
+        id: Date.now(),
+        name: name,
+        colors: colorsHex,
+        date: new Date().toLocaleString('zh-CN'),
+        isFav: false
+      }
+      history.unshift(newItem)
+      if (history.length > 50) history = history.slice(0, 50)
+      saveHistory(history)
+    }
+
+    // ================================================================
+    // 收藏
+    // ================================================================
+
+    function addFavorite() {
+      if (!currentColors || currentColors.length === 0) {
+        showToast('⚠️ 请先生成配色')
+        return
+      }
+      let favorites = getFavorites()
+      const colorsHex = currentColors.map(c => c.hex)
+      const exists = favorites.some(item =>
+        JSON.stringify(item.colors) === JSON.stringify(colorsHex)
+      )
+      if (exists) {
+        showToast('⚠️ 该配色已收藏')
+        return
+      }
+      const newItem = {
+        id: Date.now(),
+        name: currentName,
+        colors: colorsHex,
+        date: new Date().toLocaleString('zh-CN'),
+        isFav: true
+      }
+      favorites.unshift(newItem)
+      saveFavorites(favorites)
+      let history = getHistory()
+      history = history.map(item => {
+        if (JSON.stringify(item.colors) === JSON.stringify(colorsHex)) {
+          return { ...item, isFav: true }
+        }
+        return item
+      })
+      saveHistory(history)
+      if (modalOverlay.classList.contains('open')) renderModalList(currentTab)
+      updateStats()
+      showToast(`💾 已收藏：${currentName}`)
+    }
+
+    function removeFavorite(id) {
+      let favorites = getFavorites()
+      const removed = favorites.find(item => item.id === id)
+      favorites = favorites.filter(item => item.id !== id)
+      saveFavorites(favorites)
+      if (removed) {
+        let history = getHistory()
+        history = history.map(item => {
+          if (JSON.stringify(item.colors) === JSON.stringify(removed.colors)) {
+            return { ...item, isFav: false }
+          }
+          return item
+        })
+        saveHistory(history)
+      }
+      if (modalOverlay.classList.contains('open')) renderModalList(currentTab)
+      updateStats()
+      showToast('🗑️ 已删除收藏')
+    }
+
+    // ================================================================
+    // 加载配色
+    // ================================================================
+
+    function loadScheme(item) {
+      const colors = item.colors.map(hex => {
+        const { r, g, b } = hexToRgb(hex)
+        const hsl = rgbToHsl(r, g, b)
+        return { hex, h: hsl.h, s: hsl.s, l: hsl.l }
+      })
+      currentColors = colors
+      currentName = item.name
+      schemeNameEl.textContent = currentName
+      renderColors(colors)
+      updateFamilyTags(colors)
+      showToast(`📂 已加载：${item.name}`)
+      closeModal()
+    }
+
+    // ================================================================
+    // 导出图片
+    // ================================================================
+
+    function exportPalette() {
+      if (!currentColors || currentColors.length === 0) {
+        showToast('⚠️ 请先生成配色')
+        return
+      }
+      const scale = 2
+      const width = 800 * scale,
+        height = 360 * scale
+      const gap = 20 * scale
+      const swatchSize = 110 * scale
+      const totalSwatchesWidth = swatchSize * 5 + gap * 4
+      const startX = (width - totalSwatchesWidth) / 2
+
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+
+      ctx.fillStyle = '#f8f5f0'
+      ctx.fillRect(0, 0, width, height)
+
+      ctx.fillStyle = '#2c2c2c'
+      ctx.font = `bold ${28 * scale}px Inter, sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'top'
+      ctx.fillText('🌿 ' + currentName, width / 2, 20 * scale)
+
+      const yStart = 80 * scale
+      currentColors.forEach((color, index) => {
+        const x = startX + index * (swatchSize + gap)
+        const radius = 12 * scale
+        ctx.beginPath()
+        ctx.moveTo(x + radius, yStart)
+        ctx.lineTo(x + swatchSize - radius, yStart)
+        ctx.quadraticCurveTo(x + swatchSize, yStart, x + swatchSize, yStart + radius)
+        ctx.lineTo(x + swatchSize, yStart + swatchSize - radius)
+        ctx.quadraticCurveTo(x + swatchSize, yStart + swatchSize, x + swatchSize - radius, yStart + swatchSize)
+        ctx.lineTo(x + radius, yStart + swatchSize)
+        ctx.quadraticCurveTo(x, yStart + swatchSize, x, yStart + swatchSize - radius)
+        ctx.lineTo(x, yStart + radius)
+        ctx.quadraticCurveTo(x, yStart, x + radius, yStart)
+        ctx.closePath()
+        ctx.fillStyle = color.hex
+        ctx.fill()
+
+        ctx.fillStyle = '#6a6a6a'
+        ctx.font = `${16 * scale}px SF Mono, monospace`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'top'
+        ctx.fillText(color.hex.toUpperCase(), x + swatchSize / 2, yStart + swatchSize + 12 * scale)
+      })
+
+      const footerY = height - 28 * scale
+      ctx.fillStyle = '#b0b0b0'
+      ctx.font = `${14 * scale}px Inter, sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'bottom'
+      ctx.fillText('配色方案 · ' + new Date().toLocaleDateString('zh-CN'), width / 2, footerY)
+
+      ctx.fillStyle = '#d0c8c0'
+      ctx.font = `${11 * scale}px Inter, sans-serif`
+      ctx.textBaseline = 'bottom'
+      ctx.fillText('💡 可用于 PPT、设计稿、客户提案', width / 2, footerY - 18 * scale)
+
+      const link = document.createElement('a')
+      link.download = `配色-${currentName.replace(/\s/g, '')}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+      showToast('📷 高清图片已导出')
+    }
+
+    // ================================================================
+    // 方案管理面板
+    // ================================================================
+
+    function openModal() {
+      modalOverlay.classList.add('open')
+      renderModalList(currentTab)
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('open')
+    }
+
+    function getFilteredItems(tab, search, familyFilter) {
+      let items = []
+      if (tab === 'all') {
+        const favorites = getFavorites()
+        const history = getHistory()
+        const all = [...favorites]
+        history.forEach(h => {
+          if (!all.some(a => JSON.stringify(a.colors) === JSON.stringify(h.colors))) {
+            all.push({ ...h, isFav: false })
+          } else {
+            const existing = all.find(a => JSON.stringify(a.colors) === JSON.stringify(h.colors))
+            if (existing) existing.isFav = true
+          }
+        })
+        all.sort((a, b) => b.id - a.id)
+        items = all
+      } else if (tab === 'fav') {
+        items = getFavorites()
+      } else if (tab === 'history') {
+        items = getHistory()
+      }
+
+      // 搜索过滤（按色系）
+      if (search) {
+        const query = search.toLowerCase()
+        items = items.filter(item => {
+          const families = getColorFamilies(item.colors)
+          return families.some(f => f.includes(query))
+        })
+      }
+
+      // 色系筛选
+      if (familyFilter) {
+        items = items.filter(item => {
+          const families = getColorFamilies(item.colors)
+          return families.includes(familyFilter)
+        })
+      }
+
+      return items
+    }
+
+    function renderModalList(tab) {
+      currentTab = tab || currentTab
+      const items = getFilteredItems(currentTab, currentSearch, currentFamilyFilter)
+
+      if (items.length === 0) {
+        modalList.innerHTML = `<div class="empty-state">📭 暂无方案</div>`
+        modalStats.textContent = `共 0 个方案`
+        return
+      }
+
+      let html = ''
+      items.forEach(item => {
+        const isFav = item.isFav || getFavorites().some(f => JSON.stringify(f.colors) === JSON.stringify(item.colors))
+        const families = getColorFamilies(item.colors)
+        const familyTags = families
+          .filter(f => f !== '其他')
+          .map(f => `<span class="mini-tag">${getFamilyEmoji(f)} ${f}</span>`)
+          .join('')
+
+        html += `
+          <div class="scheme-item">
+            <div class="item-swatches">
+              ${item.colors.map(c => `<span class="item-swatch" style="background:${c}"></span>`).join('')}
+            </div>
+            <div class="item-info">
+              <div class="item-name">${item.name} ${isFav ? '⭐' : ''}</div>
+              <div class="item-meta">
+                <span>${item.date || ''}</span>
+                ${isFav ? '<span class="badge-fav">⭐ 已收藏</span>' : ''}
+              </div>
+              <div class="item-families">${familyTags}</div>
+            </div>
+            <div class="item-actions">
+              <button class="btn-sm btn-load" data-id="${item.id}">加载</button>
+              <button class="btn-sm btn-export-sm" data-id="${item.id}">导出</button>
+              ${isFav ? `<button class="btn-sm btn-del" data-id="${item.id}" data-action="unfav">取消收藏</button>` : ''}
+              <button class="btn-sm btn-del" data-id="${item.id}" data-action="delete">删除</button>
+            </div>
+          </div>
+        `
+      })
+      modalList.innerHTML = html
+      modalStats.textContent = `共 ${items.length} 个方案`
+
+      // 绑定事件
+      modalList.querySelectorAll('.btn-load').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation()
+          const id = parseInt(this.dataset.id)
+          const itemsAll = getFilteredItems(currentTab, currentSearch, currentFamilyFilter)
+          const item = itemsAll.find(i => i.id === id)
+          if (item) loadScheme(item)
+        })
+      })
+
+      modalList.querySelectorAll('.btn-export-sm').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation()
+          const id = parseInt(this.dataset.id)
+          const itemsAll = getFilteredItems(currentTab, currentSearch, currentFamilyFilter)
+          const item = itemsAll.find(i => i.id === id)
+          if (item) {
+            const colors = item.colors.map(hex => {
+              const { r, g, b } = hexToRgb(hex)
+              const hsl = rgbToHsl(r, g, b)
+              return { hex, h: hsl.h, s: hsl.s, l: hsl.l }
+            })
+            const oldColors = currentColors
+            const oldName = currentName
+            currentColors = colors
+            currentName = item.name
+            exportPalette()
+            currentColors = oldColors
+            currentName = oldName
+          }
+        })
+      })
+
+      modalList.querySelectorAll('.btn-del').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation()
+          const id = parseInt(this.dataset.id)
+          const action = this.dataset.action || 'delete'
+          if (action === 'delete') {
+            if (confirm('确定删除这个方案吗？')) {
+              let favorites = getFavorites().filter(f => f.id !== id)
+              saveFavorites(favorites)
+              let history = getHistory().filter(h => h.id !== id)
+              saveHistory(history)
+              renderModalList(currentTab)
+              updateStats()
+              showToast('🗑️ 已删除')
+            }
+          } else if (action === 'unfav') {
+            removeFavorite(id)
+            renderModalList(currentTab)
+          }
+        })
+      })
+    }
+
+    function updateStats() {
+      const favCount = getFavorites().length
+      const histCount = getHistory().length
+      statsText.textContent = `⭐ ${favCount} 收藏 · 📋 ${histCount} 历史`
+    }
+
+    // ================================================================
+    // 锁定 / 解锁
+    // ================================================================
+
+    function toggleLock() {
+      isLocked = !isLocked
+      lockBtn.textContent = isLocked ? '🔒 锁定' : '🔓 解锁'
+      showToast(isLocked ? '🔒 已锁定' : '🔓 已解锁')
+    }
+
+    // ================================================================
+    // 事件绑定
+    // ================================================================
+
+    generateBtn.addEventListener('click', generatePalette)
+    lockBtn.addEventListener('click', toggleLock)
+    saveBtn.addEventListener('click', addFavorite)
+    exportBtn.addEventListener('click', exportPalette)
+    manageBtn.addEventListener('click', openModal)
+    closeModalBtn.addEventListener('click', closeModal)
+    modalOverlay.addEventListener('click', function(e) {
+      if (e.target === this) closeModal()
+    })
+
+    // Tab 切换
+    modalTabs.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        modalTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+        this.classList.add('active')
+        currentTab = this.dataset.tab
+        renderModalList(currentTab)
+      })
+    })
+
+    // 搜索
+    familySearch.addEventListener('input', function() {
+      currentSearch = this.value.trim()
+      renderModalList(currentTab)
+    })
+
+    // 色系筛选按钮（动态生成）
+    function renderFamilyFilterButtons() {
+      let html = `<button class="family-filter-btn active" data-family="">全部</button>`
+      ALL_FAMILIES.forEach(f => {
+        html += `<button class="family-filter-btn" data-family="${f}">${getFamilyEmoji(f)} ${f}</button>`
+      })
+      familyFilterBar.innerHTML = html
+
+      familyFilterBar.querySelectorAll('.family-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          familyFilterBar.querySelectorAll('.family-filter-btn').forEach(b => b.classList.remove('active'))
+          this.classList.add('active')
+          currentFamilyFilter = this.dataset.family
+          renderModalList(currentTab)
+        })
+      })
+    }
+    renderFamilyFilterButtons()
+
+    // 清空全部
+    clearAllBtn.addEventListener('click', function() {
+      if (confirm('确定清空所有方案吗？（收藏和历史将全部删除）')) {
+        saveFavorites([])
+        saveHistory([])
+        renderModalList(currentTab)
+        updateStats()
+        showToast('🗑️ 已清空全部')
+      }
+    })
+
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.key === ' ' || e.key === 'Space') {
+        e.preventDefault()
+        if (modalOverlay.classList.contains('open')) return
+        generatePalette()
+      }
+      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) {
+        closeModal()
+      }
+    })
+
+    // ================================================================
+    // 初始化
+    // ================================================================
+
+    generatePalette()
+    updateStats()
+    console.log('🌿 莫兰迪配色 · 完整版已启动！')
+    console.log('💡 按空格生成 · 点击「方案」管理所有配色 · 支持色系搜索与筛选')
+  </script>
+
+</body>
+</html>
