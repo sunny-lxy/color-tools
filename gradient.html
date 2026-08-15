@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <title>🌅 莫兰迪渐变</title>
+  <title>🌅 莫兰迪渐变色</title>
 
   <style>
     /* ============================================================
@@ -30,7 +29,7 @@
       background: #ffffff;
       border-radius: 24px;
       padding: 28px 28px 20px;
-      max-width: 720px;
+      max-width: 780px;
       width: 100%;
       box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
     }
@@ -49,6 +48,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .back-btn {
@@ -73,7 +73,6 @@
       display: inline-flex;
       gap: 4px;
       flex-wrap: wrap;
-      margin-left: 6px;
     }
 
     .family-tag {
@@ -108,70 +107,67 @@
     }
     .btn-primary:hover {
       background: #1a1a1a;
+      transform: scale(1.02);
     }
 
-    .btn-outline {
-      background: transparent;
-      color: #6a6a6a;
-      border: 1px solid #d0d0d0;
-    }
-    .btn-outline:hover {
-      border-color: #2c2c2c;
-      color: #2c2c2c;
-    }
-
-    .btn-export {
-      background: #6c5b7b;
-      color: #fff;
-    }
-    .btn-export:hover {
-      background: #5a4a6a;
-    }
-
-    /* ===== 渐变预览 ===== */
+    /* ===== 渐变色带预览 ===== */
     .gradient-preview {
       width: 100%;
-      height: 200px;
+      height: 100px;
       border-radius: 16px;
       margin-bottom: 16px;
       border: 1px solid #f0ece6;
       transition: background 0.3s ease;
-      background: linear-gradient(90deg, #e8d5c4, #d4c4b8);
+      background: linear-gradient(90deg, #e8d5c4, #d4c4b8, #c4b8a8, #b8a898, #a89888);
     }
 
-    /* ===== 色块展示 ===== */
+    /* ===== 5色块展示 ===== */
     .color-stops {
-      display: flex;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
       margin-bottom: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
     }
 
     .color-stop-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       background: #faf8f5;
-      padding: 4px 14px 4px 4px;
-      border-radius: 40px;
+      border-radius: 12px;
+      padding: 10px 8px 8px;
       border: 1px solid #f0ece6;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .color-stop-item:hover {
+      transform: translateY(-3px);
+      border-color: #2c2c2c;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     }
 
     .color-stop-swatch {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      margin-bottom: 6px;
       border: 2px solid #ffffff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      flex-shrink: 0;
     }
 
     .color-stop-hex {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-family: 'SF Mono', 'Fira Code', monospace;
       color: #6a6a6a;
       letter-spacing: 0.3px;
+      display: block;
+    }
+
+    .color-stop-hsl {
+      font-size: 0.55rem;
+      color: #b0b0b0;
+      display: block;
+      margin-top: 2px;
     }
 
     /* ===== 方向控制 ===== */
@@ -184,17 +180,14 @@
     }
 
     .dir-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      padding: 6px 18px;
+      border-radius: 30px;
       border: 2px solid #e8e4de;
       background: transparent;
-      font-size: 1.2rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.25s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family: inherit;
       color: #8a8a8a;
     }
 
@@ -209,12 +202,6 @@
       color: #ffffff;
     }
 
-    .dir-btn .label {
-      font-size: 0.55rem;
-      font-weight: 500;
-      margin-left: 2px;
-    }
-
     /* ===== CSS 代码展示 ===== */
     .code-box {
       background: #faf8f5;
@@ -222,7 +209,6 @@
       border-radius: 12px;
       padding: 12px 16px;
       margin-bottom: 12px;
-      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -231,12 +217,13 @@
     }
 
     .code-box code {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-family: 'SF Mono', 'Fira Code', monospace;
       color: #2c2c2c;
       word-break: break-all;
       flex: 1;
-      min-width: 140px;
+      min-width: 120px;
+      line-height: 1.5;
     }
 
     .code-box .copy-btn {
@@ -304,36 +291,41 @@
     /* ===== 响应式 ===== */
     @media (max-width: 500px) {
       .container {
-        padding: 16px 14px 14px;
+        padding: 16px 12px 12px;
       }
       .gradient-preview {
-        height: 150px;
+        height: 70px;
+      }
+      .color-stops {
+        gap: 6px;
+      }
+      .color-stop-hex {
+        font-size: 0.55rem;
+      }
+      .color-stop-hsl {
+        font-size: 0.5rem;
       }
       .dir-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        font-size: 0.7rem;
+        padding: 4px 12px;
+      }
+      .code-box code {
+        font-size: 0.65rem;
       }
       .header-left h1 {
         font-size: 1rem;
       }
-      .code-box {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-      .code-box .copy-btn {
-        align-self: flex-end;
+    }
+
+    @media (max-width: 400px) {
+      .color-stops {
+        gap: 4px;
       }
       .color-stop-item {
-        padding: 3px 10px 3px 3px;
+        padding: 6px 4px 4px;
       }
       .color-stop-swatch {
-        width: 26px;
-        height: 26px;
-      }
-      .color-stop-hex {
-        font-size: 0.6rem;
+        aspect-ratio: 1 / 1;
       }
     }
   </style>
@@ -346,7 +338,7 @@
     <div class="header">
       <div class="header-left">
         <a href="index.html" class="back-btn" title="返回">←</a>
-        <h1>🌅 莫兰迪渐变</h1>
+        <h1>🌅 莫兰迪渐变色</h1>
         <span class="family-tags" id="familyTags"></span>
       </div>
       <div class="header-actions">
@@ -354,48 +346,40 @@
       </div>
     </div>
 
-    <!-- ===== 渐变预览 ===== -->
+    <!-- ===== 渐变色带预览 ===== -->
     <div class="gradient-preview" id="gradientPreview"></div>
 
-    <!-- ===== 色块展示 ===== -->
+    <!-- ===== 5色块展示 ===== -->
     <div class="color-stops" id="colorStops"></div>
 
     <!-- ===== 方向控制 ===== -->
     <div class="direction-control" id="directionControl">
-      <button class="dir-btn active" data-dir="to right" title="水平 →">
-        →<span class="label">水平</span>
-      </button>
-      <button class="dir-btn" data-dir="to bottom" title="垂直 ↓">
-        ↓<span class="label">垂直</span>
-      </button>
-      <button class="dir-btn" data-dir="to bottom right" title="对角线 ↘">
-        ↘<span class="label">对角</span>
-      </button>
-      <button class="dir-btn" data-dir="to bottom left" title="对角线 ↙">
-        ↙<span class="label">对角</span>
-      </button>
+      <button class="dir-btn active" data-dir="to right">水平 →</button>
+      <button class="dir-btn" data-dir="to bottom">垂直 ↓</button>
+      <button class="dir-btn" data-dir="to bottom right">对角线 ↘</button>
+      <button class="dir-btn" data-dir="to bottom left">对角线 ↙</button>
     </div>
 
     <!-- ===== CSS 代码 ===== -->
     <div class="code-box">
-      <code id="cssCode">background: linear-gradient(to right, #e8d5c4, #d4c4b8);</code>
-      <button class="copy-btn" id="copyBtn">复制</button>
+      <code id="cssCode">background: linear-gradient(to right, #e8d5c4, #d4c4b8, #c4b8a8, #b8a898, #a89888);</code>
+      <button class="copy-btn" id="copyBtn">复制代码</button>
     </div>
 
     <!-- ===== Toast ===== -->
-    <div class="toast" id="toast">💡 点击「生成」获取新渐变 · 选择方向改变角度</div>
+    <div class="toast" id="toast">💡 点击色块复制色值 · 按空格生成新渐变</div>
 
     <!-- ===== 底部 ===== -->
     <div class="footer-info">
       <span>按 <kbd>空格</kbd> 生成新渐变</span>
-      <span>🌿 莫兰迪色系 · 柔和渐变</span>
+      <span>🌿 5色莫兰迪渐变 · 复制即用</span>
     </div>
 
   </div>
 
   <script>
     /* ================================================================
-       🌅 莫兰迪渐变色工具 · 完整逻辑
+       🌅 莫兰迪渐变色工具 · 5色版
        ================================================================ */
 
     // ---- DOM 引用 ----
@@ -413,7 +397,7 @@
     let currentDirection = 'to right'
 
     // ================================================================
-    // 颜色工具（复用莫兰迪逻辑）
+    // 颜色工具
     // ================================================================
 
     function hslToHex(h, s, l) {
@@ -482,7 +466,7 @@
     }
 
     // ================================================================
-    // 色系判断（与莫兰迪工具保持一致）
+    // 色系判断
     // ================================================================
 
     function getColorFamilies(colors) {
@@ -530,14 +514,12 @@
     }
 
     // ================================================================
-    // 生成渐变
+    // 生成渐变（5色）
     // ================================================================
 
     function generateGradient() {
-      // 随机生成 2-3 个莫兰迪颜色
-      const count = Math.random() > 0.5 ? 3 : 2
       const colors = []
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < 5; i++) {
         const c = generateMorandiColor()
         const hex = hslToHex(c.h, c.s, c.l)
         colors.push({ hex, h: c.h, s: c.s, l: c.l })
@@ -571,6 +553,21 @@
         hexSpan.textContent = color.hex.toUpperCase()
         item.appendChild(hexSpan)
 
+        const hsl = rgbToHsl(
+          parseInt(color.hex.slice(1, 3), 16),
+          parseInt(color.hex.slice(3, 5), 16),
+          parseInt(color.hex.slice(5, 7), 16)
+        )
+        const hslSpan = document.createElement('span')
+        hslSpan.className = 'color-stop-hsl'
+        hslSpan.textContent = `H${hsl.h}° S${hsl.s}% L${hsl.l}%`
+        item.appendChild(hslSpan)
+
+        // 点击复制色值
+        item.addEventListener('click', function() {
+          copyToClipboard(color.hex.toUpperCase())
+        })
+
         colorStopsEl.appendChild(item)
       })
     }
@@ -589,45 +586,14 @@
     }
 
     // ================================================================
-    // Toast
+    // 复制功能
     // ================================================================
 
-    let toastTimer = null
-
-    function showToast(msg, isSuccess = true) {
-      toast.textContent = msg
-      toast.classList.add('active')
-      if (!isSuccess) {
-        toast.style.color = '#c0392b'
-      } else {
-        toast.style.color = '#2c7a4a'
-      }
-      clearTimeout(toastTimer)
-      toastTimer = setTimeout(() => {
-        toast.classList.remove('active')
-        toast.textContent = '💡 点击「生成」获取新渐变 · 选择方向改变角度'
-        toast.style.color = '#8a8a8a'
-      }, 2000)
-    }
-
-    // ================================================================
-    // 复制 CSS
-    // ================================================================
-
-    function copyCSS() {
-      const text = cssCode.textContent
+    function copyToClipboard(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
-          copyBtn.textContent = '已复制 ✅'
-          copyBtn.classList.add('copied')
-          showToast('✅ CSS 代码已复制')
-          setTimeout(() => {
-            copyBtn.textContent = '复制'
-            copyBtn.classList.remove('copied')
-          }, 2000)
-        }).catch(() => {
-          fallbackCopy(text)
-        })
+          showToast(`✅ 已复制 ${text}`)
+        }).catch(() => fallbackCopy(text))
       } else {
         fallbackCopy(text)
       }
@@ -642,15 +608,66 @@
       textarea.select()
       try {
         document.execCommand('copy')
-        copyBtn.textContent = '已复制 ✅'
+        showToast(`✅ 已复制 ${text}`)
+      } catch (err) {
+        showToast('⚠️ 复制失败，请手动复制', false)
+      }
+      document.body.removeChild(textarea)
+    }
+
+    function copyCSS() {
+      const text = cssCode.textContent
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          copyBtn.textContent = '✅ 已复制'
+          copyBtn.classList.add('copied')
+          showToast('✅ CSS 代码已复制')
+          setTimeout(() => {
+            copyBtn.textContent = '复制代码'
+            copyBtn.classList.remove('copied')
+          }, 2000)
+        }).catch(() => fallbackCopyCSS(text))
+      } else {
+        fallbackCopyCSS(text)
+      }
+    }
+
+    function fallbackCopyCSS(text) {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      try {
+        document.execCommand('copy')
+        copyBtn.textContent = '✅ 已复制'
         showToast('✅ CSS 代码已复制')
         setTimeout(() => {
-          copyBtn.textContent = '复制'
+          copyBtn.textContent = '复制代码'
         }, 2000)
       } catch (err) {
         showToast('⚠️ 复制失败，请手动复制', false)
       }
       document.body.removeChild(textarea)
+    }
+
+    // ================================================================
+    // Toast
+    // ================================================================
+
+    let toastTimer = null
+
+    function showToast(msg, isSuccess = true) {
+      toast.textContent = msg
+      toast.classList.add('active')
+      toast.style.color = isSuccess ? '#2c7a4a' : '#c0392b'
+      clearTimeout(toastTimer)
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('active')
+        toast.textContent = '💡 点击色块复制色值 · 按空格生成新渐变'
+        toast.style.color = '#8a8a8a'
+      }, 2000)
     }
 
     // ================================================================
@@ -693,8 +710,8 @@
     // ================================================================
 
     generateGradient()
-    console.log('🌅 莫兰迪渐变色工具已启动！')
-    console.log('💡 按空格生成新渐变 · 点击方向按钮改变角度')
+    console.log('🌅 莫兰迪渐变色工具（5色版）已启动！')
+    console.log('💡 按空格生成 · 点击色块复制色值 · 点击方向改变角度')
   </script>
 
 </body>
