@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <title>🌅 莫兰迪渐变</title>
+
+  <style>
+    /* ============================================================
+       全局样式
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: #f5f0eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px 28px 20px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+    }
+
+    /* ===== 标题栏 ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      font-size: 1.3rem;
+      color: #b0b0b0;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .back-btn:hover {
+      color: #2c2c2c;
+    }
+
+    .header-left h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c2c2c;
+    }
+
+    .family-tags {
+      display: inline-flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-left: 6px;
+    }
+
+    .family-tag {
+      font-size: 0.6rem;
+      padding: 2px 10px;
+      border-radius: 40px;
+      background: #f0ece6;
+      color: #6a6a6a;
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 7px 18px;
+      border: none;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #2c2c2c;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #1a1a1a;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #6a6a6a;
+      border: 1px solid #d0d0d0;
+    }
+    .btn-outline:hover {
+      border-color: #2c2c2c;
+      color: #2c2c2c;
+    }
+
+    .btn-export {
+      background: #6c5b7b;
+      color: #fff;
+    }
+    .btn-export:hover {
+      background: #5a4a6a;
+    }
+
+    /* ===== 渐变预览 ===== */
+    .gradient-preview {
+      width: 100%;
+      height: 200px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #f0ece6;
+      transition: background 0.3s ease;
+      background: linear-gradient(90deg, #e8d5c4, #d4c4b8);
+    }
+
+    /* ===== 色块展示 ===== */
+    .color-stops {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .color-stop-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #faf8f5;
+      padding: 4px 14px 4px 4px;
+      border-radius: 40px;
+      border: 1px solid #f0ece6;
+    }
+
+    .color-stop-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      flex-shrink: 0;
+    }
+
+    .color-stop-hex {
+      font-size: 0.7rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: #6a6a6a;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== 方向控制 ===== */
+    .direction-control {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dir-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid #e8e4de;
+      background: transparent;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8a8a8a;
+    }
+
+    .dir-btn:hover {
+      border-color: #b0b0b0;
+      color: #2c2c2c;
+    }
+
+    .dir-btn.active {
+      border-color: #2c2c2c;
+      background: #2c2c2c;
+      color: #ffffff;
+    }
+
+    .dir-btn .label {
+      font-size: 0.55rem;
+      font-weight: 500;
+      margin-left: 2px;
+    }
+
+    /* ===== CSS 代码展示 ===== */
+    .code-box {
+      background: #faf8f5;
+      border: 1px solid #f0ece6;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .code-box code {
+      font-size: 0.78rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: #2c2c2c;
+      word-break: break-all;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .code-box .copy-btn {
+      background: transparent;
+      border: 1px solid #e0dcd6;
+      border-radius: 30px;
+      padding: 4px 14px;
+      font-size: 0.7rem;
+      color: #6a6a6a;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      flex-shrink: 0;
+    }
+
+    .code-box .copy-btn:hover {
+      border-color: #2c2c2c;
+      color: #2c2c2c;
+    }
+
+    .code-box .copy-btn.copied {
+      border-color: #2c7a4a;
+      color: #2c7a4a;
+      background: #eaf5ee;
+    }
+
+    /* ===== Toast ===== */
+    .toast {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #8a8a8a;
+      padding: 4px 0;
+      min-height: 28px;
+      transition: opacity 0.3s;
+    }
+
+    .toast.active {
+      color: #2c7a4a;
+      font-weight: 500;
+    }
+
+    /* ===== 底部 ===== */
+    .footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f0ece6;
+      font-size: 0.7rem;
+      color: #c0c0c0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-info kbd {
+      background: #f5f0eb;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.6rem;
+      color: #8a8a8a;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 500px) {
+      .container {
+        padding: 16px 14px 14px;
+      }
+      .gradient-preview {
+        height: 150px;
+      }
+      .dir-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+      .header-left h1 {
+        font-size: 1rem;
+      }
+      .code-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .code-box .copy-btn {
+        align-self: flex-end;
+      }
+      .color-stop-item {
+        padding: 3px 10px 3px 3px;
+      }
+      .color-stop-swatch {
+        width: 26px;
+        height: 26px;
+      }
+      .color-stop-hex {
+        font-size: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ===== 标题栏 ===== -->
+    <div class="header">
+      <div class="header-left">
+        <a href="index.html" class="back-btn" title="返回">←</a>
+        <h1>🌅 莫兰迪渐变</h1>
+        <span class="family-tags" id="familyTags"></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="generateBtn">✨ 生成</button>
+      </div>
+    </div>
+
+    <!-- ===== 渐变预览 ===== -->
+    <div class="gradient-preview" id="gradientPreview"></div>
+
+    <!-- ===== 色块展示 ===== -->
+    <div class="color-stops" id="colorStops"></div>
+
+    <!-- ===== 方向控制 ===== -->
+    <div class="direction-control" id="directionControl">
+      <button class="dir-btn active" data-dir="to right" title="水平 →">
+        →<span class="label">水平</span>
+      </button>
+      <button class="dir-btn" data-dir="to bottom" title="垂直 ↓">
+        ↓<span class="label">垂直</span>
+      </button>
+      <button class="dir-btn" data-dir="to bottom right" title="对角线 ↘">
+        ↘<span class="label">对角</span>
+      </button>
+      <button class="dir-btn" data-dir="to bottom left" title="对角线 ↙">
+        ↙<span class="label">对角</span>
+      </button>
+    </div>
+
+    <!-- ===== CSS 代码 ===== -->
+    <div class="code-box">
+      <code id="cssCode">background: linear-gradient(to right, #e8d5c4, #d4c4b8);</code>
+      <button class="copy-btn" id="copyBtn">复制</button>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast">💡 点击「生成」获取新渐变 · 选择方向改变角度</div>
+
+    <!-- ===== 底部 ===== -->
+    <div class="footer-info">
+      <span>按 <kbd>空格</kbd> 生成新渐变</span>
+      <span>🌿 莫兰迪色系 · 柔和渐变</span>
+    </div>
+
+  </div>
+
+  <script>
+    /* ================================================================
+       🌅 莫兰迪渐变色工具 · 完整逻辑
+       ================================================================ */
+
+    // ---- DOM 引用 ----
+    const preview = document.getElementById('gradientPreview')
+    const colorStopsEl = document.getElementById('colorStops')
+    const familyTagsEl = document.getElementById('familyTags')
+    const cssCode = document.getElementById('cssCode')
+    const copyBtn = document.getElementById('copyBtn')
+    const generateBtn = document.getElementById('generateBtn')
+    const toast = document.getElementById('toast')
+    const dirBtns = document.querySelectorAll('.dir-btn')
+
+    // ---- 状态 ----
+    let currentColors = [] // [{ hex, h, s, l }]
+    let currentDirection = 'to right'
+
+    // ================================================================
+    // 颜色工具（复用莫兰迪逻辑）
+    // ================================================================
+
+    function hslToHex(h, s, l) {
+      const s1 = s / 100,
+        l1 = l / 100
+      const c = (1 - Math.abs(2 * l1 - 1)) * s1
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+      const m = l1 - c / 2
+      let r, g, b
+      if (h >= 0 && h < 60) { r = c;
+        g = x;
+        b = 0 } else if (h >= 60 && h < 120) { r = x;
+        g = c;
+        b = 0 } else if (h >= 120 && h < 180) { r = 0;
+        g = c;
+        b = x } else if (h >= 180 && h < 240) { r = 0;
+        g = x;
+        b = c } else if (h >= 240 && h < 300) { r = x;
+        g = 0;
+        b = c } else { r = c;
+        g = 0;
+        b = x }
+      const r255 = Math.round((r + m) * 255)
+      const g255 = Math.round((g + m) * 255)
+      const b255 = Math.round((b + m) * 255)
+      return '#' + [r255, g255, b255].map(c => c.toString(16).padStart(2, '0')).join('')
+    }
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      if (!result) return { r: 0, g: 0, b: 0 }
+      return { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
+    }
+
+    function rgbToHsl(r, g, b) {
+      const r1 = r / 255,
+        g1 = g / 255,
+        b1 = b / 255
+      const max = Math.max(r1, g1, b1),
+        min = Math.min(r1, g1, b1)
+      let h, s, l = (max + min) / 2
+      if (max === min) { h = 0;
+        s = 0 } else {
+        const d = max - min
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+        switch (max) {
+          case r1:
+            h = ((g1 - b1) / d + (g1 < b1 ? 6 : 0)) / 6;
+            break
+          case g1:
+            h = ((b1 - r1) / d + 2) / 6;
+            break
+          case b1:
+            h = ((r1 - g1) / d + 4) / 6;
+            break
+        }
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
+    }
+
+    function generateMorandiColor() {
+      const hue = Math.floor(Math.random() * 360)
+      const saturation = 20 + Math.floor(Math.random() * 20)
+      const lightness = 45 + Math.floor(Math.random() * 35)
+      return { h: hue, s: saturation, l: lightness }
+    }
+
+    // ================================================================
+    // 色系判断（与莫兰迪工具保持一致）
+    // ================================================================
+
+    function getColorFamilies(colors) {
+      const families = new Set()
+      colors.forEach(hex => {
+        const { r, g, b } = hexToRgb(hex)
+        const hsl = rgbToHsl(r, g, b)
+        const h = hsl.h,
+          s = hsl.s,
+          l = hsl.l
+        let family = ''
+        if (l < 20) family = '黑色系'
+        else if (l > 85 && s < 20) family = '白色系'
+        else if (s < 20 && l >= 20 && l <= 80) family = '灰色系'
+        else if (h >= 20 && h < 50 && l < 40) family = '棕色系'
+        else if (h >= 300 && h < 350 && s > 30) family = '粉色系'
+        else if ((h >= 0 && h < 20) || (h >= 340 && h <= 360)) family = '红色系'
+        else if (h >= 20 && h < 50) family = '橙色系'
+        else if (h >= 50 && h < 75) family = '黄色系'
+        else if (h >= 75 && h < 165) family = '绿色系'
+        else if (h >= 165 && h < 250) family = '蓝色系'
+        else if (h >= 250 && h < 300) family = '紫色系'
+        else if (h >= 300 && h < 340) family = '粉色系'
+        else family = '其他'
+        families.add(family)
+      })
+      return Array.from(families)
+    }
+
+    function getFamilyEmoji(family) {
+      const map = {
+        '红色系': '🔴',
+        '橙色系': '🟠',
+        '黄色系': '🟡',
+        '绿色系': '🟢',
+        '蓝色系': '🔵',
+        '紫色系': '🟣',
+        '粉色系': '🌸',
+        '棕色系': '🟤',
+        '灰色系': '⚪',
+        '黑色系': '⬛',
+        '白色系': '⬜'
+      }
+      return map[family] || '📦'
+    }
+
+    // ================================================================
+    // 生成渐变
+    // ================================================================
+
+    function generateGradient() {
+      // 随机生成 2-3 个莫兰迪颜色
+      const count = Math.random() > 0.5 ? 3 : 2
+      const colors = []
+      for (let i = 0; i < count; i++) {
+        const c = generateMorandiColor()
+        const hex = hslToHex(c.h, c.s, c.l)
+        colors.push({ hex, h: c.h, s: c.s, l: c.l })
+      }
+      currentColors = colors
+      updatePreview()
+      updateColorStops()
+      updateFamilyTags()
+    }
+
+    function updatePreview() {
+      const hexes = currentColors.map(c => c.hex)
+      const gradient = `linear-gradient(${currentDirection}, ${hexes.join(', ')})`
+      preview.style.background = gradient
+      cssCode.textContent = `background: ${gradient};`
+    }
+
+    function updateColorStops() {
+      colorStopsEl.innerHTML = ''
+      currentColors.forEach(color => {
+        const item = document.createElement('div')
+        item.className = 'color-stop-item'
+
+        const swatch = document.createElement('span')
+        swatch.className = 'color-stop-swatch'
+        swatch.style.background = color.hex
+        item.appendChild(swatch)
+
+        const hexSpan = document.createElement('span')
+        hexSpan.className = 'color-stop-hex'
+        hexSpan.textContent = color.hex.toUpperCase()
+        item.appendChild(hexSpan)
+
+        colorStopsEl.appendChild(item)
+      })
+    }
+
+    function updateFamilyTags() {
+      const hexes = currentColors.map(c => c.hex)
+      const families = getColorFamilies(hexes)
+      const filtered = families.filter(f => f !== '其他')
+      if (filtered.length === 0) {
+        familyTagsEl.innerHTML = ''
+        return
+      }
+      familyTagsEl.innerHTML = filtered.map(f =>
+        `<span class="family-tag">${getFamilyEmoji(f)} ${f}</span>`
+      ).join('')
+    }
+
+    // ================================================================
+    // Toast
+    // ================================================================
+
+    let toastTimer = null
+
+    function showToast(msg, isSuccess = true) {
+      toast.textContent = msg
+      toast.classList.add('active')
+      if (!isSuccess) {
+        toast.style.color = '#c0392b'
+      } else {
+        toast.style.color = '#2c7a4a'
+      }
+      clearTimeout(toastTimer)
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('active')
+        toast.textContent = '💡 点击「生成」获取新渐变 · 选择方向改变角度'
+        toast.style.color = '#8a8a8a'
+      }, 2000)
+    }
+
+    // ================================================================
+    // 复制 CSS
+    // ================================================================
+
+    function copyCSS() {
+      const text = cssCode.textContent
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          copyBtn.textContent = '已复制 ✅'
+          copyBtn.classList.add('copied')
+          showToast('✅ CSS 代码已复制')
+          setTimeout(() => {
+            copyBtn.textContent = '复制'
+            copyBtn.classList.remove('copied')
+          }, 2000)
+        }).catch(() => {
+          fallbackCopy(text)
+        })
+      } else {
+        fallbackCopy(text)
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      try {
+        document.execCommand('copy')
+        copyBtn.textContent = '已复制 ✅'
+        showToast('✅ CSS 代码已复制')
+        setTimeout(() => {
+          copyBtn.textContent = '复制'
+        }, 2000)
+      } catch (err) {
+        showToast('⚠️ 复制失败，请手动复制', false)
+      }
+      document.body.removeChild(textarea)
+    }
+
+    // ================================================================
+    // 方向控制
+    // ================================================================
+
+    function setDirection(dir, btn) {
+      currentDirection = dir
+      dirBtns.forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      if (currentColors.length > 0) {
+        updatePreview()
+      }
+    }
+
+    // ================================================================
+    // 事件绑定
+    // ================================================================
+
+    generateBtn.addEventListener('click', generateGradient)
+
+    dirBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        setDirection(this.dataset.dir, this)
+      })
+    })
+
+    copyBtn.addEventListener('click', copyCSS)
+
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+      if (e.key === ' ' || e.key === 'Space') {
+        e.preventDefault()
+        generateGradient()
+      }
+    })
+
+    // ================================================================
+    // 初始化
+    // ================================================================
+
+    generateGradient()
+    console.log('🌅 莫兰迪渐变色工具已启动！')
+    console.log('💡 按空格生成新渐变 · 点击方向按钮改变角度')
+  </script>
+
+</body>
+</html>
